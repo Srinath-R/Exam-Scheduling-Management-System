@@ -1,22 +1,20 @@
-# Exam-Scheduling-Management-System
+#                                                  Exam-Scheduling-Management-System
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  
+  Made with :heart:
 
   <h3 align="center">README</h3>
 
-  <p align="center">
-    Made with :heart:
-  </p>
+  
 </p>
 
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
+  A web application written in PHP to automate the process of Exam Scheduling and Management. Yeah, I know, The title gives it away. :stuck_out_tongue:
 
 <!-- GETTING STARTED -->
 ## Getting Started
