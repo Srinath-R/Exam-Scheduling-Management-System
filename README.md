@@ -23,7 +23,7 @@ Simple steps to get the application running!
 
 ### Prerequisites
 
-You"ll need
+You'll need
 1. Web Server software like MAMP/LAMP/XAMPP/WAMP (Anything will do, but I recommend MAMP :smiley: )
 
 
