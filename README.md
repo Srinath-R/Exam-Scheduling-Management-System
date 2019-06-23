@@ -34,7 +34,15 @@ You'll need
 3. Launch XAMPP/WAMP/MAMP/LAMP
 4. Open phpmyadmin (http://localhost/phpmyadmin)
 5. Create a database named 'db'.
-6. Import db.sql
+6. Execute the following script in the SQL section of the database.
+```
+  CREATE TABLE admins (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
 7. Run the script http://localhost/[folder-name]/login.php
 
 
