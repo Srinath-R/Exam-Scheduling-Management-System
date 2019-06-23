@@ -43,7 +43,7 @@ You'll need
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ```
-7. Run the script http://localhost/[folder-name]/login.php
+7. Run the script http://localhost/[root-folder-path]/login.php
 
 
 
