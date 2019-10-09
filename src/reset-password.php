@@ -78,12 +78,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link href="https://fonts.googleapis.com/css?family=Cinzel:700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style type="text/css">
-        body{ font: 14px ;font-family: 'Cinzel', serif;  margin:auto;width: 30%;padding: 70px 0;}
+        body{ font: 14px ;font-family: 'Cinzel', serif;  margin:auto;width: 30%;padding: 70px 0;      
+  
+        }
+  
+        
+
         .wrapper{ width: 350px; padding: 20px; }
     </style>
+     <link rel="stylesheet" href="css/style2.css">
 </head>
 <body>
     <div class="wrapper">
+
+        
+
         <h2>Reset Password</h2>
         <p>Please fill out this form to reset your password.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">

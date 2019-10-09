@@ -1,11 +1,26 @@
 <?php
 // Initialize the session
 session_start();
-
+error_reporting(0);
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
+}
+require_once "config.php";
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    $branch=trim($_POST["bran"]);
+    $month=trim($_POST["mon"]);
+    $semester=trim($_POST["sem"]);
+
+        // Prepare an insert statement
+        $sql = "SELECT * FROM course where course_id IN (SELECT course.course_id FROM course,faculty_course WHERE branch_name = '$branch' AND semester ='$semester')";
+
+        $result = $mysqli->query($sql) or die(mysqli_error());
+        header("location:allotedfaculty.php");
+       
 }
 ?>
 
@@ -97,30 +112,24 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             
                         </li>
                         <li>
-                            <a class="has-arrow" title="Exam" href="#" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Exam</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="Allot Faculty" href="exam.php"><span class="mini-sub-pro">Allot Faculty</span></a></li>
-                                <li><a title="Alloted Faculty" href="allotedfaculty.php"><span class="mini-sub-pro">Alloted Faculty</span></a></li>
-                                <li><a title="Scheduled Exam" href="scheduled.php"><span class="mini-sub-pro">Scheduled Exam</span></a></li>
-                         
-                            </ul>
+                            <a title="Exam" href="#" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Schedule Exam</span></a>
                         </li>
                         <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Professors</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
                                 <li><a title="All Professors" href="allfaculty.php"><span class="mini-sub-pro">All Professors</span></a></li>
-                                <li><a title="Add Professor" href="addfaculty.php"><span class="mini-sub-pro">Add Professor</span></a></li>
-                                <li><a title="Edit Professor" href="editfaculty.php"><span class="mini-sub-pro">Edit Professor</span></a></li>
-                                <li><a title="Delete Professor" href="deletefaculty.php"><span class="mini-sub-pro">Delete Professor</span></a></li>
+                                <li><a title="Add Professor" href="#"><span class="mini-sub-pro">Add Professor</span></a></li>
+                                <li><a title="Edit Professor" href="#"><span class="mini-sub-pro">Edit Professor</span></a></li>
+                                <li><a title="Professor Profile" href="#"><span class="mini-sub-pro">Professor Profile</span></a></li>
                             </ul>
                         </li>
                         <li>
                             <a class="has-arrow" href="all-students.html" aria-expanded="false"><span class="educate-icon educate-student icon-wrap"></span> <span class="mini-click-non">Students</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="All Students" href="allstudent.php"><span class="mini-sub-pro">All Students</span></a></li>
-                                <li><a title="Add Students" href="addstudent.php"><span class="mini-sub-pro">Add Student</span></a></li>
-                                <li><a title="Edit Students" href="editstudent.php"><span class="mini-sub-pro">Edit Student</span></a></li>
-                                <li><a title="Delete Student" href="deletestudent.php"><span class="mini-sub-pro">Delete Student</span></a></li>
+                                <li><a title="All Students" href="#"><span class="mini-sub-pro">All Students</span></a></li>
+                                <li><a title="Add Students" href="#"><span class="mini-sub-pro">Add Student</span></a></li>
+                                <li><a title="Edit Students" href="#"><span class="mini-sub-pro">Edit Student</span></a></li>
+                                <li><a title="Students Profile" href="#"><span class="mini-sub-pro">Student Profile</span></a></li>
                             </ul>
                         </li>
                         <li>
@@ -360,8 +369,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
-															<img src="" alt="" />
-															<span class="admin-name"><b><?php echo htmlspecialchars($_SESSION["username"]); ?></b></span>
+															<img src="img/product/pro4.jpg" alt="" />
+															<span class="admin-name">Prof. Minerva</span>
 															<i class="fa fa-angle-down edu-icon edu-down-arrow"></i>
 														</a>
                                                     <ul role="menu" class="dropdown-header-top author-log dropdown-menu animated zoomIn">
@@ -835,36 +844,28 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                         <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                            
                                         </li>
-                                        <li><a data-toggle="collapse" data-target="#demoevent" href="exam.php">Exam<span class="admin-project-icon edu-icon edu-down-arrow"></a>
-                                        <ul id="demoevent" class="collapse dropdown-header-top">
-                                                <li><a href="exam.php">Schedule Exam</a>
-                                                </li>
-                                                <li><a href="scheduled.php">Scheduled Exam</a>
-                                                </li>
-                                
-                                            </ul>
-                                        </li>
+                                        <li><a href="#">Schedule Exam</a></li>
                                         <li><a data-toggle="collapse" data-target="#demoevent" href="#">Professors <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul id="demoevent" class="collapse dropdown-header-top">
                                                 <li><a href="allfaculty.php">All Professors</a>
                                                 </li>
-                                                <li><a href="addfaculty.php">Add Professor</a>
+                                                <li><a href="#">Add Professor</a>
                                                 </li>
-                                                <li><a href="editfaculty.php">Edit Professor</a>
+                                                <li><a href="#">Edit Professor</a>
                                                 </li>
-                                                <li><a href="deletefaculty.php">Delete Professor</a>
+                                                <li><a href="#">Professor Profile</a>
                                                 </li>
                                             </ul>
                                         </li>
                                         <li><a data-toggle="collapse" data-target="#demopro" href="#">Students <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul id="demopro" class="collapse dropdown-header-top">
-                                                <li><a href="allstudent.php">All Students</a>
+                                                <li><a href="#">All Students</a>
                                                 </li>
-                                                <li><a href="addstudent.php">Add Student</a>
+                                                <li><a href="#">Add Student</a>
                                                 </li>
-                                                <li><a href="editstudent.php">Edit Student</a>
+                                                <li><a href="#">Edit Student</a>
                                                 </li>
-                                                <li><a href="deletestudent.php">Delete Student </a>
+                                                <li><a href="#">Student Profile</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -931,9 +932,73 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             <div class="breadcome-list">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="breadcome-heading">
                                         
-                                        <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1></div>
+        <h3>Enter Faculty details</h3>
+
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-horizontal" role="form">
+
+  <div class="form-group">
+    <label class="col-lg-3 control-label">Branch:</label>
+    <div class="col-lg-8">
+      <input class="form-control" name="bran" list="branches" >
+      <datalist id="branches">
+    <option value="CSE">
+    <option value="ECE">
+    <option value="EEE">
+    <option value="MECH">
+    <option value="CHE">
+  </datalist>
+    </div>
+    
+  </div>
+  <div class="form-group">
+    <label class="col-lg-3 control-label">Semester:</label>
+    <div class="col-lg-8">
+      <input class="form-control" name="sem" list="sems" >
+      <datalist id="sems">
+    <option value="1">
+    <option value="2">
+    <option value="3">
+    <option value="4">
+    <option value="5">
+    <option value="6">
+    <option value="7">
+    <option value="8">
+  </datalist>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-lg-3 control-label">Start Date:</label>
+    <div class="col-lg-8">
+      <input class="form-control" name="mon" type="date" >
+      <!-- <datalist id="mons">
+    <option value="January">
+    <option value="February">
+    <option value="March">
+    <option value="April">
+    <option value="May">
+    <option value="June">
+    <option value="July">
+    <option value="August">
+    <option value="September">
+    <option value="October">
+    <option value="November">
+    <option value="December">
+  </datalist> -->
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label class="col-md-3 control-label"></label>
+    <div class="col-md-8">
+      <input type="submit" class="btn btn-primary" value="Save Changes">
+      <span></span>
+      <input type="reset" class="btn btn-default" value="Cancel">
+    </div>
+  </div>
+</form>
+
                                         
                                     </div>  
                                 </div>

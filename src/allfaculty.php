@@ -1,12 +1,16 @@
 <?php
 // Initialize the session
 session_start();
-
+error_reporting(0);
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
+require_once "config.php";
+
+$sql = " SELECT * FROM faculty  ";
+$result = $mysqli->query($sql) or die(mysqli_error());
 ?>
 
 <!doctype html>
@@ -97,13 +101,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             
                         </li>
                         <li>
-                            <a class="has-arrow" title="Exam" href="#" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Exam</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="Allot Faculty" href="exam.php"><span class="mini-sub-pro">Allot Faculty</span></a></li>
-                                <li><a title="Alloted Faculty" href="allotedfaculty.php"><span class="mini-sub-pro">Alloted Faculty</span></a></li>
-                                <li><a title="Scheduled Exam" href="scheduled.php"><span class="mini-sub-pro">Scheduled Exam</span></a></li>
-                         
-                            </ul>
+                            <a title="Exam" href="#" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Schedule Exam</span></a>
                         </li>
                         <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Professors</span></a>
@@ -111,7 +109,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 <li><a title="All Professors" href="allfaculty.php"><span class="mini-sub-pro">All Professors</span></a></li>
                                 <li><a title="Add Professor" href="addfaculty.php"><span class="mini-sub-pro">Add Professor</span></a></li>
                                 <li><a title="Edit Professor" href="editfaculty.php"><span class="mini-sub-pro">Edit Professor</span></a></li>
-                                <li><a title="Delete Professor" href="deletefaculty.php"><span class="mini-sub-pro">Delete Professor</span></a></li>
+                                <li><a title="Delete Professor" href="deletefaculty.php"><span class="mini-sub-pro">Professor Profile</span></a></li>
                             </ul>
                         </li>
                         <li>
@@ -120,7 +118,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 <li><a title="All Students" href="allstudent.php"><span class="mini-sub-pro">All Students</span></a></li>
                                 <li><a title="Add Students" href="addstudent.php"><span class="mini-sub-pro">Add Student</span></a></li>
                                 <li><a title="Edit Students" href="editstudent.php"><span class="mini-sub-pro">Edit Student</span></a></li>
-                                <li><a title="Delete Student" href="deletestudent.php"><span class="mini-sub-pro">Delete Student</span></a></li>
+                                <li><a title="Delete Student" href="deletestudent.php"><span class="mini-sub-pro">Delete Student </span></a></li>
                             </ul>
                         </li>
                         <li>
@@ -835,36 +833,28 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                         <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                            
                                         </li>
-                                        <li><a data-toggle="collapse" data-target="#demoevent" href="exam.php">Exam<span class="admin-project-icon edu-icon edu-down-arrow"></a>
-                                        <ul id="demoevent" class="collapse dropdown-header-top">
-                                                <li><a href="exam.php">Schedule Exam</a>
-                                                </li>
-                                                <li><a href="scheduled.php">Scheduled Exam</a>
-                                                </li>
-                                
-                                            </ul>
-                                        </li>
+                                        <li><a href="#">Schedule Exam</a></li>
                                         <li><a data-toggle="collapse" data-target="#demoevent" href="#">Professors <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul id="demoevent" class="collapse dropdown-header-top">
                                                 <li><a href="allfaculty.php">All Professors</a>
                                                 </li>
-                                                <li><a href="addfaculty.php">Add Professor</a>
+                                                <li><a href="#">Add Professor</a>
                                                 </li>
-                                                <li><a href="editfaculty.php">Edit Professor</a>
+                                                <li><a href="#">Edit Professor</a>
                                                 </li>
-                                                <li><a href="deletefaculty.php">Delete Professor</a>
+                                                <li><a href="#">Professor Profile</a>
                                                 </li>
                                             </ul>
                                         </li>
                                         <li><a data-toggle="collapse" data-target="#demopro" href="#">Students <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul id="demopro" class="collapse dropdown-header-top">
-                                                <li><a href="allstudent.php">All Students</a>
+                                                <li><a href="#">All Students</a>
                                                 </li>
-                                                <li><a href="addstudent.php">Add Student</a>
+                                                <li><a href="#">Add Student</a>
                                                 </li>
-                                                <li><a href="editstudent.php">Edit Student</a>
+                                                <li><a href="#">Edit Student</a>
                                                 </li>
-                                                <li><a href="deletestudent.php">Delete Student </a>
+                                                <li><a href="#">Student Profile</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -933,7 +923,42 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <div class="breadcome-heading">
                                         
-                                        <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1></div>
+                                        <table id="example1" class="table table-bordered table-striped" style="margin-right:-10px">
+              <thead>
+                <tr>
+                <th>faculty id</th>
+                <th>faculty name</th>
+                <th>phone</th>
+                <th>email</th>
+                <th>designation</th>
+                
+                </tr>
+              </thead>
+              
+    <?php
+         $var=mysqli_num_rows($result);
+         if(($var)>0)
+         {
+     
+          
+          while($row=mysqli_fetch_array($result)){
+            $id=$row['faculty_id'];
+            $name=$row['faculty_name'];
+            $pho=$row['phone_no'];
+            $ema=$row['email'];
+            $desi=$row['designation'];
+    ?>
+                <tr>
+                <td><?php echo $id;?></td>
+                 <td><?php echo $name;?></td>
+                 <td><?php echo $pho;?></td>
+                 <td><?php echo $ema;?></td>
+                 <td><?php echo $desi;?></td>
+                </tr>
+
+              
+<?php }}?>           
+</table> </div>
                                         
                                     </div>  
                                 </div>

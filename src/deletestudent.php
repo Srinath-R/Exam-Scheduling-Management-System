@@ -1,11 +1,71 @@
 <?php
 // Initialize the session
 session_start();
-
+error_reporting(0);
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
+}
+require_once "config.php";
+$id="";
+$id_err="";
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    // Validate username
+    if(empty(trim($_POST["id"]))){
+        $id_err = "Please enter a username.";
+    } else{
+        // Prepare a select statement
+        $sql = "SELECT student_id FROM student WHERE student_id = ?";
+
+        if($stmt = $mysqli->prepare($sql)){
+            // Bind variables to the prepared statement as parameters
+            $stmt->bind_param("s", $param_id);
+
+            // Set parameters
+            $param_id = trim($_POST["id"]);
+
+            // Attempt to execute the prepared statement
+            if($stmt->execute()){
+                // store result
+                $stmt->store_result();
+
+                if($stmt->num_rows == 0){
+                    $id_err = "Enter an existing ID.";
+                } else{
+                    $id = trim($_POST["id"]);
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+        }
+
+        // Close statement
+        $stmt->close();
+    }
+    
+  
+
+    if(empty($id_err)){
+
+   
+
+        $update_profile = $mysqli->query("DELETE from student WHERE student_id ='$id'");
+         if ($update_profile)
+          {
+            
+              header("location: allstudent.php");
+              exit();
+          }
+          else
+          {
+               echo $mysqli->error;
+           }
+    }
+
+    // Close connection
+    $mysqli->close();
 }
 ?>
 
@@ -97,13 +157,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             
                         </li>
                         <li>
-                            <a class="has-arrow" title="Exam" href="#" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Exam</span></a>
-                            <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="Allot Faculty" href="exam.php"><span class="mini-sub-pro">Allot Faculty</span></a></li>
-                                <li><a title="Alloted Faculty" href="allotedfaculty.php"><span class="mini-sub-pro">Alloted Faculty</span></a></li>
-                                <li><a title="Scheduled Exam" href="scheduled.php"><span class="mini-sub-pro">Scheduled Exam</span></a></li>
-                         
-                            </ul>
+                            <a title="Exam" href="#" aria-expanded="false"><span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Schedule Exam</span></a>
                         </li>
                         <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Professors</span></a>
@@ -835,15 +889,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                         <li><a data-toggle="collapse" data-target="#Charts" href="#">Home <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                            
                                         </li>
-                                        <li><a data-toggle="collapse" data-target="#demoevent" href="exam.php">Exam<span class="admin-project-icon edu-icon edu-down-arrow"></a>
-                                        <ul id="demoevent" class="collapse dropdown-header-top">
-                                                <li><a href="exam.php">Schedule Exam</a>
-                                                </li>
-                                                <li><a href="scheduled.php">Scheduled Exam</a>
-                                                </li>
-                                
-                                            </ul>
-                                        </li>
+                                        <li><a href="#">Schedule Exam</a></li>
                                         <li><a data-toggle="collapse" data-target="#demoevent" href="#">Professors <span class="admin-project-icon edu-icon edu-down-arrow"></span></a>
                                             <ul id="demoevent" class="collapse dropdown-header-top">
                                                 <li><a href="allfaculty.php">All Professors</a>
@@ -864,7 +910,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                                 </li>
                                                 <li><a href="editstudent.php">Edit Student</a>
                                                 </li>
-                                                <li><a href="deletestudent.php">Delete Student </a>
+                                                <li><a href="deletestudent.php">Delete Student</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -931,9 +977,29 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                             <div class="breadcome-list">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="breadcome-heading">
                                         
-                                        <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1></div>
+        <h3>Enter Student details</h3>
+
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-horizontal" role="form">
+
+  <div class="form-group">
+    <label class="col-lg-3 control-label">Student ID:</label>
+    <div class="col-lg-8">
+      <input class="form-control" name="id" type="text" >
+    </div>
+    <span class="help-block"><?php echo $id_err; ?></span>
+  </div>
+  
+  
+  <div class="form-group">
+    <label class="col-md-3 control-label"></label>
+    <div class="col-md-8">
+      <input type="submit" class="btn btn-primary" value="Delete">
+      <span></span>
+      <input type="reset" class="btn btn-default" value="Cancel">
+    </div>
+  </div>
+</form>
                                         
                                     </div>  
                                 </div>
